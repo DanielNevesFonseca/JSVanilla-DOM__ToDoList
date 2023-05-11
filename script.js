@@ -23,6 +23,14 @@ function createCard(taskInfo) {
   // Adicionando o titulo da tarefa como texto do paragrafo
   p.innerText = taskInfo.titulo;
 
+  if (taskInfo.tipo === "Urgente") {
+    span.className = 'span-urgent';
+  } else if (taskInfo.tipo === "Prioritário") {
+    span.className = 'span-priority';
+  } else if (taskInfo.tipo === "Normal") {
+    span.className = 'span-normal';
+  }
+
   // Adicionando span e paragrafo a div
   div.appendChild(span);
   div.appendChild(p);
@@ -32,6 +40,16 @@ function createCard(taskInfo) {
 
   // Adicionando icone ao botão
   button.innerHTML = '<i class="fa fa-trash" aria-hidden="true"></i>';
+  button.addEventListener("click", function () {
+    // Encontrando o índice da tarefa no array tasks por meio de uma callback
+    const index = tasks.findIndex(task => task.titulo === taskInfo.titulo
+      && task.tipo === taskInfo.tipo);
+    console.log(index)
+    tasks.splice(index, 1);
+    renderElements(tasks);
+
+  })
+
 
   /// Adicionando a div e o botão de deletar ao list item
   li.appendChild(div);
@@ -45,14 +63,32 @@ function renderElements(taskList) {
   htmlList.innerHTML = "";
 
   // Ajustar a lógica
-  let card = createCard(taskList[0]);
-  htmlList.appendChild(card);
+  for (let i = 0; i < taskList.length; i++) {
+    let card = createCard(taskList[i]);
+    htmlList.appendChild(card);
+  }
 
-  card = createCard(taskList[1]);
-  htmlList.appendChild(card);
+  return htmlList;
 
-  card = createCard(taskList[2]);
-  htmlList.appendChild(card);
 }
-
 renderElements(tasks);
+
+function createNewTask(taskList) {
+  const taskTitle = document.querySelector('#input_title');
+  const taskType = document.querySelector('#input_priority');
+  const submitBtn = document.querySelector('#btnSubmit');
+
+  submitBtn.addEventListener('click', function (event) {
+    // evitar que o efeito bubbling faça sair da página atual
+    event.preventDefault();
+    const newTaskInfo = {
+      titulo: taskTitle.value,
+      tipo: taskType.value
+    }
+    taskList.push(newTaskInfo);
+    renderElements(taskList);
+  })
+}
+createNewTask(tasks);
+
+
