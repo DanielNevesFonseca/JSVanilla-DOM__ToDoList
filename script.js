@@ -47,7 +47,7 @@ function createCard(taskInfo) {
     const index = manualIndexOf(tasks, titleTask);
     console.log(index, titleTask)
     tasks.splice(index, 1);
-    renderElements(tasks); 
+    renderElements(tasks);
   });
   item.appendChild(infoContainer);
   item.appendChild(button);
@@ -84,3 +84,15 @@ function createNewTask(taskList) {
   })
 }
 createNewTask(tasks);
+
+function searchTask(tasks) {
+  const input = document.querySelector('.input-search');
+
+  input.addEventListener('input', () => {
+    const inputValue = input.value;
+    const filtered = tasks.filter((task) => task.title.toLowerCase().includes(inputValue.toLowerCase()));
+    console.log(filtered)
+    renderElements(filtered);
+  })
+}
+searchTask(tasks)
