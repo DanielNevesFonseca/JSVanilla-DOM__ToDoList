@@ -65,13 +65,12 @@ function renderElements(taskList) {
   }
   return htmlList;
 }
-renderElements(tasks);
 
 function createNewTask(taskList) {
   const taskTitle = document.querySelector('#input_title');
   const taskCategory = document.querySelector('#input_priority');
   const submitBtn = document.querySelector('#btnSubmit');
-
+  
   submitBtn.addEventListener('click', function (event) {
     // evitar que o efeito bubbling faça sair da página atual
     event.preventDefault();
@@ -83,16 +82,27 @@ function createNewTask(taskList) {
     renderElements(taskList);
   })
 }
-createNewTask(tasks);
 
 function searchTask(tasks) {
   const input = document.querySelector('.input-search');
-
+  const tasksContainer = document.querySelector('.tasks');
+  const noTask = document.createElement('li');
+  noTask.innerText = 'Nenhuma tarefa Foi Encontrada!!!';
+  
+  
   input.addEventListener('input', () => {
     const inputValue = input.value;
+    // array.filter --- (elem), caso condição satisfeita ------> coloca dentro de um array caso a condição seja satisfeita
     const filtered = tasks.filter((task) => task.title.toLowerCase().includes(inputValue.toLowerCase()));
-    console.log(filtered)
-    renderElements(filtered);
+    if(filtered.length === 0){
+      tasksContainer.innerHTML = '';
+      tasksContainer.appendChild(noTask);
+    } else {
+      renderElements(filtered);
+    }
   })
 }
-searchTask(tasks)
+
+createNewTask(tasks);
+renderElements(tasks);
+searchTask(tasks);
